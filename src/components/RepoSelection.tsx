@@ -3,7 +3,7 @@ import NameImage from "./NameImage.tsx";
 import {useContext} from "react";
 import {WorkDirectoryContext} from "../store/repository.ts";
 import {open} from "@tauri-apps/api/dialog";
-import {path} from "@tauri-apps/api";
+import {invoke, path} from "@tauri-apps/api";
 
 function RepoItem({name, path, needPath, iconSize, iconColor}: { name: string, path: string, needPath: boolean, iconSize: number, iconColor?: string }) {
     return (
@@ -34,16 +34,19 @@ export default function RepoSelection({historySpace, addHistorySpace}: {historyS
       const dirs: string[] = newWorkPath.split(path.sep);
       const workName = dirs[dirs.length - 1];
       // add to history
-      updateWorkspace(workName, newWorkPath);
+      await updateWorkspace(workName, newWorkPath);
     }
     close();
   }
 
-  function updateWorkspace(name: string, path: string) {
-      // add to history
+  async function updateWorkspace(name: string, path: string) {
       addHistorySpace(workspace, workPath);
       setWorkPath(path);
       setWorkspace(name);
+      // init new repo
+      await invoke("init_workspace", {path: path});
+      const repoList = await invoke("scan_repo", {path: path});
+      console.log(repoList);
   }
 
   return (
