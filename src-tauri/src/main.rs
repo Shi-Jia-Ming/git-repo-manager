@@ -11,6 +11,9 @@ mod utils;
 mod service;
 
 fn main() {
+    init_app_dir();
+    init_history_file();
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             read_history_file,
@@ -24,7 +27,4 @@ fn main() {
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-
-    init_app_dir();
-    init_history_file();
 }

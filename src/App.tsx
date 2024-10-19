@@ -1,5 +1,4 @@
 import {useRef, useState} from "react";
-// import reactLogo from "./assets/react.svg";
 import "./styles/global.css";
 import "./styles/rc-dock-extra.css";
 import {ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle} from "react-resizable-panels";

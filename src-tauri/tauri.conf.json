@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "pdf-translator",
+    "productName": "repo-manage",
     "version": "0.0.0"
   },
   "tauri": {
