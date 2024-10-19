@@ -3,10 +3,10 @@ import {useRef, useState} from "react";
 import "./styles/global.css";
 import "./styles/rc-dock-extra.css";
 import {ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle} from "react-resizable-panels";
-import MainView from "./components/MainView";
 import Sidebar from "./components/Sidebar";
 import {WorkDirectoryContext} from "./store/repository";
 import Toolbar from "./components/Toolbar.tsx";
+import MainView from "./components/MainView.tsx";
 
 function App() {
   const [needAnimation, setNeedAnimation] = useState<boolean>(false);

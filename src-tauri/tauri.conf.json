@@ -18,8 +18,7 @@
       },
       "http": {
         "all": true,
-        "request": true,
-        "scope": ["http://118.26.36.198:31188/*", "http://47.121.201.169:39770/*"]
+        "request": true
       },
       "window": {
         "all": true
@@ -34,6 +33,19 @@
         "message": false,
         "open": true,
         "save": false
+      },
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "exists": true,
+        "scope": ["$APPDATA/*", "$APPCONFIG/*", "$DESKTOP/*"]
       }
     },
     "windows": [
@@ -45,7 +57,7 @@
         "resizable": true,
         "decorations": false,
         "transparent": true,
-        "title": "pdf-translator"
+        "title": "repo-manage"
       }
     ],
     "security": {
@@ -54,7 +66,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "cn.edu.hit.pdf-translator",
+      "identifier": "com.lengtouzai.repo-manage",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
