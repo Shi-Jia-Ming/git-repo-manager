@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { WorkDirectoryContext } from "../store/repository";
+import { WorkDirectoryContext } from "../store/workspace";
 import { invoke } from "@tauri-apps/api";
 import { RepoInfo } from "../types/repo.type";
 import "mac-scrollbar/dist/mac-scrollbar.css";
@@ -14,6 +14,13 @@ export default function FileList() {
   async function scanRepo() {
     const repos = await invoke<RepoInfo[]>("scan_repo", { path: workPath });
     setRepoList(repos);
+  }
+
+  async function setActive(repo: RepoInfo) {
+    repoList.forEach((r) => {
+      r.active = r.id === repo.id;
+    });
+    setRepoList([...repoList]);
   }
 
   useEffect(() => {
@@ -36,8 +43,11 @@ export default function FileList() {
         {repoList.map((repo) => (
           <div
             key={repo.id}
-            className={"border-b w-full h-[60px] overflow-hidden text-ellipsis whitespace-nowrap p-1.5 cannot-select hover:bg-gray-200 active:bg-gray-300 font-mono"}
-          >{repo.name}</div>
+            className={`border-b w-full h-[60px] overflow-hidden text-ellipsis whitespace-nowrap p-1.5 cannot-select ${repo.active ? 'bg-gray-300' : 'hover:bg-gray-200 bg-transparent'} active:bg-gray-300 font-mono`}
+            onClick={() => {setActive(repo)}}
+          >
+            {repo.name}
+          </div>
         ))}
       </MacScrollbar>
     </div>

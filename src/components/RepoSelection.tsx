@@ -1,7 +1,7 @@
 import {Popover, PopoverButton, PopoverPanel} from "@headlessui/react";
 import NameImage from "./NameImage.tsx";
 import {useContext} from "react";
-import {WorkDirectoryContext} from "../store/repository.ts";
+import {WorkDirectoryContext} from "../store/workspace.ts";
 import {open} from "@tauri-apps/api/dialog";
 import {invoke, path} from "@tauri-apps/api";
 

@@ -3,7 +3,7 @@ import "./styles/global.css";
 import "./styles/rc-dock-extra.css";
 import {ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle} from "react-resizable-panels";
 import Sidebar from "./components/Sidebar";
-import {WorkDirectoryContext} from "./store/repository";
+import {WorkDirectoryContext} from "./store/workspace.ts";
 import Toolbar from "./components/Toolbar.tsx";
 import MainView from "./components/MainView.tsx";
 

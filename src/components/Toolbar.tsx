@@ -2,7 +2,7 @@ import RepoSelection from "./RepoSelection.tsx";
 import {appWindow} from "@tauri-apps/api/window";
 import {useContext, useEffect, useState} from "react";
 import {invoke} from "@tauri-apps/api";
-import {WorkDirectoryContext} from "../store/repository.ts";
+import {WorkDirectoryContext} from "../store/workspace.ts";
 
 export default function Toolbar() {
   const [isWindowMaximized, setIsWindowMaximized] = useState<boolean>(false);
