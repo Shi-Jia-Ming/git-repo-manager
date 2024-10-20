@@ -57,7 +57,7 @@ export default function Toolbar() {
 
   return (
     <div
-      className={"size-full flex justify-between items-center cursor-pointer"} id={"tool-bar"}
+      className={"size-full flex justify-between items-center cursor-pointer border-b"} id={"tool-bar"}
       data-tauri-drag-region={"true"}
     >
       <div className={"flex flex-row"} id={"function-area"}>
@@ -68,7 +68,7 @@ export default function Toolbar() {
           <RepoSelection historySpace={historySpace} addHistorySpace={addHistorySpace}/>
         </div>
       </div>
-      <div id={"control-button-group-area"} className={"absolute right-0 top-0 h-10 w-auto flex flex-row z-10"}>
+      <div id={"control-button-group-area"} className={"absolute right-0 top-0 h-10 w-auto flex flex-rows"}>
         <div className={"h-10 w-12 flex align-middle justify-center hover:bg-gray-100 active:bg-gray-200"}
              id={"minimize-button-container"}>
           <button className={"size-full flex justify-center items-center"} onClick={() => {

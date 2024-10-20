@@ -47,6 +47,10 @@ pub fn select_repo(connection: &Connection) -> Vec<RepoInfo> {
 
 #[command]
 pub fn scan_repo(path: &str) -> Vec<RepoInfo> {
+    if path.is_empty() {
+        return Vec::new();
+    }
+    let connection: Connection = generate_db_connection(path).expect("failed to generate db connection");
     // scan the sub dir of the path
     let mut repo_list: Vec<RepoInfo> = Vec::new();
     let path = Path::new(path);
@@ -56,14 +60,17 @@ pub fn scan_repo(path: &str) -> Vec<RepoInfo> {
                 let sub_path = entry.path();
                 if sub_path.is_dir() {
                     if let Some(file_name) = sub_path.file_name() {
-                        if let Some(first_char) = file_name.to_str().and_then(|s| s.chars().next())
-                        {
+                        if let Some(first_char) = file_name.to_str().and_then(|s| s.chars().next()) {
                             if first_char != '.' {
                                 repo_list.push(match Repository::open(&sub_path) {
-                                    Ok(_repo) => RepoInfo {
-                                        id: (&repo_list).len() as i32,
-                                        name: file_name.to_str().unwrap().to_string(),
-                                        path: sub_path.to_str().unwrap().to_string(),
+                                    Ok(_repo) => {
+                                        let repo_info = RepoInfo {
+                                            id: (&repo_list).len() as i32,
+                                            name: file_name.to_str().unwrap().to_string(),
+                                            path: sub_path.to_str().unwrap().to_string(),
+                                        };
+                                        insert_repo(&repo_info, &connection);
+                                        repo_info
                                     },
                                     Err(_e) => {
                                         continue;
@@ -75,8 +82,6 @@ pub fn scan_repo(path: &str) -> Vec<RepoInfo> {
                 }
             }
         }
-    } else {
-        println!("无法读取目录: {:?}", path);
     }
     repo_list
 }
@@ -88,12 +93,8 @@ pub fn load_repo_list(path: &str) -> Vec<RepoInfo> {
     }
     let repo_list: Vec<RepoInfo>;
     if is_new_workspace(path) {
+        let _ = init_database(path).expect("failed to init database");
         repo_list = scan_repo(path);
-        let connection = init_database(path).expect("failed to init database");
-        // save the repo list to the workspace db
-        for repo in &repo_list {
-            insert_repo(&repo, &connection);
-        }
     } else {
         let connection = generate_db_connection(path).expect("failed to generate db connection");
         repo_list = select_repo(&connection);

@@ -62,7 +62,7 @@ function App() {
               <PanelResizeHandle
                 className={"hover:bg-purple-500 active:bg-purple-500 transition-colors duration-300"}/>
               <Panel defaultSize={80}>
-                <MainView/>
+                {/* <MainView/> */}
               </Panel>
             </PanelGroup>
           </div>
