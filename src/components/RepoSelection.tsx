@@ -45,8 +45,6 @@ export default function RepoSelection({historySpace, addHistorySpace}: {historyS
       setWorkspace(name);
       // init new repo
       await invoke("init_workspace", {path: path});
-      const repoList = await invoke("scan_repo", {path: path});
-      console.log(repoList);
   }
 
   return (

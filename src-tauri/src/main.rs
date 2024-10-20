@@ -4,7 +4,7 @@
 #[cfg(debug_assertions)]
 use tauri::Manager;
 
-use crate::service::repo_manage::scan_repo;
+use crate::service::repo_manage::{scan_repo, load_repo_list};
 use crate::service::workspace::init_workspace;
 use crate::service::config::init_app_dir;
 use crate::service::history_workspace::{init_history_file, read_history_file, write_history_file};
@@ -22,7 +22,8 @@ fn main() {
             read_history_file,
             write_history_file,
             init_workspace,
-            scan_repo
+            scan_repo,
+            load_repo_list,
         ])
         .setup(|app| {
             set_window_shadow(app);
