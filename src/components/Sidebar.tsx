@@ -19,7 +19,7 @@ export default function Sidebar() {
   const [currentActive] = useState<number>(0);
 
   return (
-    <div className={"size-full bg-[#f6f6f6] border-r border-[#e0e0e0]"}>
+    <div className={"size-full border-r border-[#e0e0e0]"}>
       {sidebarItems.filter((sidebarItem) => {
         return sidebarItem.index === currentActive;
       })[0].component()}

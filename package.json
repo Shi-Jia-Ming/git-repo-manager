@@ -11,13 +11,11 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.1.9",
-    "@recogito/recogito-react-pdf": "^0.8.8",
     "@tauri-apps/api": "^1.6.0",
     "annotpdf": "^1.0.15",
     "rc-dock": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-pdf-highlighter": "^8.0.0-rc.0",
     "react-resizable-panels": "^2.1.4"
   },
   "devDependencies": {
