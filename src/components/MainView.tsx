@@ -1,36 +1,34 @@
-import DockLayout, { LayoutData } from "rc-dock";
-import "rc-dock/dist/rc-dock.css";
-import {useState} from "react";
-
-function DefaultComponent() {
-    const [_state, _setState] = useState("Hello");
-    return <div className={"bg-amber-100 size-full"}>{_state}</div>
-}
-
-const defaultLayout: LayoutData = {
-    dockbox: {
-        id: 'dockbox',
-        mode: 'horizontal',
-        children: [
-            {
-                id: 'root',
-                tabs: [
-                    {id: 'tab1', title: 'tab1', content: () => <DefaultComponent/>, closable: true},
-                    // {id: 'tab2', title: 'tab2', content: DefaultComponent, closable: true}
-                ]
-            }
-        ]
-    }
-};
-
+import { useContext, useEffect, useState } from "react";
+import { RepoContext } from "../store/repository";
+import Markdown from "react-markdown";
+import { invoke } from "@tauri-apps/api";
+import { MacScrollbar } from "mac-scrollbar";
 
 export default function MainView() {
-    return (
-        <DockLayout
-            dockId={'main'}
-            defaultLayout={defaultLayout}
-            dropMode={'edge'}
-            style={{width: '100%', height: '100%'}}
-        />
-    )
+
+  const { activeRepo } = useContext(RepoContext);
+
+  const [markdown, setMarkdown] = useState<string>("");
+
+  useEffect(() => {
+    invoke<string>("get_readme", {repoPath: activeRepo.path}).then((res) => {
+      setMarkdown(res);
+    });
+  }, [activeRepo])
+
+  return (
+    <div id={"repo-main-view"} className={"p-4 pt-6 size-full"}>
+      <div id={"repo-title"} className={"w-full h-10"}>
+        <div className={"text-3xl"}>{activeRepo.name}</div>
+      </div>
+      <div className={"divider"}/>
+      <div id={"repo-description"} className={"w-full readme-board"}>
+        <div id={"readme"} className={"border border-black h-full w-[80%] p-4 pr-0 rounded-lg"}>
+          <MacScrollbar className={"size-full"}>
+            <Markdown>{ markdown }</Markdown>
+          </MacScrollbar>
+        </div>
+      </div>
+    </div>
+  )
 }

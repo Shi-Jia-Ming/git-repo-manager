@@ -4,10 +4,12 @@ import { invoke } from "@tauri-apps/api";
 import { RepoInfo } from "../types/repo.type";
 import "mac-scrollbar/dist/mac-scrollbar.css";
 import { MacScrollbar } from "mac-scrollbar";
+import { RepoContext } from "../store/repository";
 
 export default function FileList() {
 
   const { workPath } = useContext(WorkDirectoryContext);
+  const { setActiveRepo } = useContext(RepoContext);
 
   const [repoList, setRepoList] = useState<RepoInfo[]>([]);
 
@@ -17,6 +19,7 @@ export default function FileList() {
   }
 
   async function setActive(repo: RepoInfo) {
+    setActiveRepo(repo);
     repoList.forEach((r) => {
       r.active = r.id === repo.id;
     });

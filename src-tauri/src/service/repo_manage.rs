@@ -102,3 +102,26 @@ pub fn load_repo_list(path: &str) -> Vec<RepoInfo> {
 
     repo_list
 }
+
+
+#[command]
+pub fn get_readme(repo_path: &str) -> String {
+    let repo = Repository::open(repo_path).expect("failed to open repo");
+    let head = repo.head().expect("failed to get head");
+    let head_commit = head.peel_to_commit().expect("failed to peel to commit");
+    let tree = head_commit.tree().expect("failed to get tree");
+    
+    // 尝试匹配 README.md 或 readme.md
+    let readme_path = if tree.get_path(Path::new("README.md")).is_ok() {
+        Path::new("README.md")
+    } else if tree.get_path(Path::new("readme.md")).is_ok() {
+        Path::new("readme.md")
+    } else {
+        return String::from("未找到 README.md 或 readme.md 文件");
+    };
+
+    let readme = tree.get_path(readme_path).expect("failed to get README file");
+    let blob = readme.to_object(&repo).expect("failed to get object");
+    let content = blob.as_blob().expect("failed to get blob").content();
+    String::from_utf8(content.to_vec()).expect("failed to convert to string")
+}
