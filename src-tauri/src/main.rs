@@ -12,6 +12,7 @@ use crate::utils::set_window_shadow;
 
 mod utils;
 mod service;
+mod database;
 
 fn main() {
     init_app_dir();

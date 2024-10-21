@@ -1,56 +1,20 @@
 use git2::Repository;
 use rusqlite::Connection;
-use serde::Serialize;
 use std::fs;
 use std::path::Path;
 use tauri::command;
 
-use crate::service::workspace::init_database;
+use crate::database::{index::{get_db_connection, init_database}, module::repo_info::{insert_repo, select_repo, RepoInfo}};
 
-use super::workspace::{generate_db_connection, is_new_workspace};
+use super::workspace::is_new_workspace;
 
-#[derive(Serialize, Debug)]
-pub struct RepoInfo {
-    id: i32,
-    name: String,
-    path: String,
-}
-
-pub fn insert_repo(repo: &RepoInfo, connection: &Connection) {
-    connection
-        .execute(
-            "insert into repo_info (name, path) values (?1, ?2)",
-            &[&repo.name, &repo.path],
-        )
-        .unwrap();
-}
-
-pub fn select_repo(connection: &Connection) -> Vec<RepoInfo> {
-    let mut repo_list: Vec<RepoInfo> = Vec::new();
-    let mut stmt = connection
-        .prepare("select * from repo_info")
-        .unwrap();
-    let repo_iter = stmt
-        .query_map([], |repo: &rusqlite::Row<'_>| {
-            Ok(RepoInfo {
-                id: repo.get(0)?,
-                name: repo.get(1)?,
-                path: repo.get(2)?,
-            })
-        })
-        .expect("failed to query repo_info");
-    for repo in repo_iter {
-        repo_list.push(repo.unwrap());
-    }
-    repo_list
-}
 
 #[command]
 pub fn scan_repo(path: &str) -> Vec<RepoInfo> {
     if path.is_empty() {
         return Vec::new();
     }
-    let connection: Connection = generate_db_connection(path).expect("failed to generate db connection");
+    let connection: Connection = get_db_connection(path).expect("failed to generate db connection");
     // scan the sub dir of the path
     let mut repo_list: Vec<RepoInfo> = Vec::new();
     let path = Path::new(path);
@@ -96,8 +60,8 @@ pub fn load_repo_list(path: &str) -> Vec<RepoInfo> {
         let _ = init_database(path).expect("failed to init database");
         repo_list = scan_repo(path);
     } else {
-        let connection = generate_db_connection(path).expect("failed to generate db connection");
-        repo_list = select_repo(&connection);
+        let connection = get_db_connection(path).expect("failed to generate db connection");
+        repo_list = select_repo(&connection).expect("failed to select repo");
     }
 
     repo_list
