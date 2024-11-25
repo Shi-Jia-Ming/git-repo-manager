@@ -1,8 +1,11 @@
-use tauri::command;
+use tauri::{command, App, Manager};
 
 #[command]
-pub fn init_app_dir() {
-    let app_dir = tauri::api::path::app_data_dir(tauri::generate_context!().config()).unwrap();
+pub fn init_app_dir(app: &mut App) {
+    let app_dir = app
+        .path()
+        .resolve("", tauri::path::BaseDirectory::AppData)
+        .unwrap();
     if !app_dir.exists() {
         std::fs::create_dir_all(app_dir).unwrap();
     }

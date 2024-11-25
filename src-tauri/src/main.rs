@@ -4,25 +4,24 @@
 #[cfg(debug_assertions)]
 use tauri::Manager;
 
-use crate::service::repo_manage::{scan_repo, load_repo_list, get_readme};
-use crate::service::workspace::init_workspace;
 use crate::service::config::init_app_dir;
 use crate::service::history_workspace::{init_history_file, read_history_file, write_history_file};
+use crate::service::repo_manage::{get_readme, load_repo_list, scan_repo};
 use crate::utils::set_window_shadow;
 
-mod utils;
-mod service;
 mod database;
+mod service;
+mod utils;
 
 fn main() {
-    init_app_dir();
-    init_history_file();
-
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_fs::init())
         .invoke_handler(tauri::generate_handler![
             read_history_file,
             write_history_file,
-            init_workspace,
             scan_repo,
             load_repo_list,
             get_readme
@@ -30,7 +29,11 @@ fn main() {
         .setup(|app| {
             set_window_shadow(app);
             #[cfg(debug_assertions)]
-            app.get_window("main").unwrap().open_devtools();
+            app.get_webview_window("main").unwrap().open_devtools();
+
+            init_app_dir(app);
+            init_history_file(app);
+
             Ok(())
         })
         .run(tauri::generate_context!())

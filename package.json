@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.1.9",
-    "@tauri-apps/api": "^1.6.0",
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-dialog": "~2",
+    "@tauri-apps/plugin-fs": "~2",
+    "@tauri-apps/plugin-http": "~2",
+    "@tauri-apps/plugin-shell": "~2",
     "annotpdf": "^1.0.15",
     "mac-scrollbar": "^0.13.6",
     "rc-dock": "^3.3.0",
@@ -21,7 +25,7 @@
     "react-resizable-panels": "^2.1.4"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1",
+    "@tauri-apps/cli": "^2.0.0",
     "@types/node": "^22.7.5",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
