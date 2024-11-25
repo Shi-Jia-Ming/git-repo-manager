@@ -3,7 +3,6 @@ import NameImage from "./NameImage.tsx";
 import { useContext } from "react";
 import { WorkDirectoryContext } from "../store/workspace.ts";
 import { open } from "@tauri-apps/plugin-dialog";
-import { invoke } from "@tauri-apps/api/core";
 import { path } from "@tauri-apps/api";
 
 function RepoItem({
@@ -65,7 +64,7 @@ export default function RepoSelection({
     });
     if (typeof newWorkPath === "string") {
       // store the new workspace and save the history workspace
-      const dirs: string[] = newWorkPath.split(path.sep);
+      const dirs: string[] = newWorkPath.split(path.sep());
       const workName = dirs[dirs.length - 1];
       // add to history
       await updateWorkspace(workName, newWorkPath);
@@ -77,8 +76,6 @@ export default function RepoSelection({
     addHistorySpace(workspace, workPath);
     setWorkPath(path);
     setWorkspace(name);
-    // init new repo
-    await invoke("init_workspace", { path: path });
   }
 
   return (
@@ -142,7 +139,7 @@ export default function RepoSelection({
                   key={item.path}
                   className={"w-full h-12"}
                   onClick={() => {
-                    updateWorkspace(item.name, item.path);
+                    updateWorkspace(item.name, item.path).then();
                     close();
                   }}
                 >

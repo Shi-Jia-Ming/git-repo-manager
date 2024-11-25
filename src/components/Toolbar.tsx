@@ -58,7 +58,7 @@ export default function Toolbar() {
         }
       });
     }, 500);
-  });
+  }, []);
 
   return (
     <div

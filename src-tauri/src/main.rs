@@ -7,7 +7,6 @@ use tauri::Manager;
 use crate::service::config::init_app_dir;
 use crate::service::history_workspace::{init_history_file, read_history_file, write_history_file};
 use crate::service::repo_manage::{get_readme, load_repo_list, scan_repo};
-use crate::service::workspace::init_workspace;
 use crate::utils::set_window_shadow;
 
 mod database;
@@ -23,7 +22,6 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             read_history_file,
             write_history_file,
-            init_workspace,
             scan_repo,
             load_repo_list,
             get_readme

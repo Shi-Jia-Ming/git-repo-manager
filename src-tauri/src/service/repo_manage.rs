@@ -9,7 +9,7 @@ use crate::database::{
     module::repo_info::{insert_repo, select_repo, RepoInfo},
 };
 
-use super::workspace::is_new_workspace;
+use super::workspace::{init_workspace, is_new_workspace};
 
 #[command]
 pub fn scan_repo(path: &str) -> Vec<RepoInfo> {
@@ -60,6 +60,7 @@ pub fn load_repo_list(path: &str) -> Vec<RepoInfo> {
     }
     let repo_list: Vec<RepoInfo>;
     if is_new_workspace(path) {
+        init_workspace(path).expect("failed to init workspace");
         let _ = init_database(path).expect("failed to init database");
         repo_list = scan_repo(path);
     } else {
